@@ -30,4 +30,12 @@ public class SalleService {
     public void deleteSalle(Long id) {
         salleRepository.deleteById(id);
     }
+
+    public List<Salle> getSallesByFiliere(String filiere) {
+        return salleRepository.findByFiliere(filiere);
+    }
+
+    public Salle getSalleByCode(String code) {
+        return salleRepository.findByCode(code).orElse(null);
+    }
 }

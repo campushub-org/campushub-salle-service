@@ -17,8 +17,16 @@ public class SalleController {
     }
 
     @GetMapping
-    public List<Salle> getAllSalles() {
+    public List<Salle> getAllSalles(@RequestParam(required = false) String filiere) {
+        if (filiere != null && !filiere.isEmpty()) {
+            return salleService.getSallesByFiliere(filiere);
+        }
         return salleService.getAllSalles();
+    }
+
+    @GetMapping("/code/{code}")
+    public Salle getSalleByCode(@PathVariable String code) {
+        return salleService.getSalleByCode(code);
     }
 
     @GetMapping("/{id}")

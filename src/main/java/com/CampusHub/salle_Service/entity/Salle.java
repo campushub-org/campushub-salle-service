@@ -23,6 +23,7 @@ public class Salle {
     private String nom;
     private String batiment;
     private int capacite;
+    private String filiere;    // Ajout pour correspondre au dataset
     private String equipements; // Liste simple (texte)
-    private String statut;      // disponible / maintenance / reservee
+    private boolean actif = true; // Remplace statut par un indicateur de disponibilité physique
 }
