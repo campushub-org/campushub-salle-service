@@ -1,62 +1,64 @@
-# campushub-salle-service - Service de Gestion des Salles
+# 🏫 CampusHub - Salle Service
 
-Ce service est responsable de la gestion des salles (par exemple, salles de cours, laboratoires, amphithéâtres) au sein de l'écosystème Campushub. Il gère les opérations CRUD (Create, Read, Update, Delete) pour les salles et leurs attributs associés.
+[![Java](https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=java&logoColor=white)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 
-### Fonctionnalités
+> Le **Salle Service** est le module dédié à la gestion de l'infrastructure physique du campus. Il centralise l'inventaire des salles de cours, des amphithéâtres et des laboratoires, tout en assurant le suivi de leurs capacités et équipements.
 
-*   **Gestion des salles**: Création, lecture, mise à jour et suppression des informations sur les salles.
-*   **Intégration Eureka**: S'enregistre auprès de `campushub-registry` et peut découvrir d'autres services.
-*   **Configuration centralisée**: Obtient sa configuration de `campushub-config`.
-*   **Persistance des données**: Interagit avec une base de données MySQL (`campushub-salle-db`) pour stocker les informations des salles.
+---
 
-### Comment ça marche
+## 🚀 Fonctionnalités Clés
 
-`campushub-salle-service` est une application Spring Boot. Au démarrage, il se connecte à `campushub-config` pour obtenir sa configuration, s'enregistre auprès de `campushub-registry`, et se connecte à sa base de données MySQL dédiée (`campushub-salle-db`). Il expose ensuite des API REST pour interagir avec les données des salles.
+- **Gestion du Patrimoine** : Référencement complet des bâtiments et des salles de l'établissement.
+- **Spécifications Techniques** : Suivi des capacités d'accueil et des équipements disponibles (Projecteurs, PCs, Climatisation, etc.).
+- **Filtrage par Filière** : Organisation des ressources physiques par affinité pédagogique.
+- **Statut en Temps Réel** : Indicateur de disponibilité physique (Actif/Inactif) pour la planification.
+- **Intégration Cloud** : Enregistrement sur Eureka pour une résolution transparente par le service de planification.
 
-### Commandes Utiles
+---
 
-#### Construire le service (localement, sans Docker)
+## 🛠️ Stack Technique
 
-Pour construire le fichier JAR exécutable du service:
+- **Core :** Spring Boot 3.2.5
+- **Persistence :** Spring Data JPA + Hibernate
+- **Base de données :** MySQL 8.0
+- **Discovery :** Eureka Client
+- **Lombok :** Pour un code concis et maintenable
 
+---
+
+## 📡 API Endpoints Principaux
+
+| Méthode | Path | Description | Accès |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/salles` | Liste de toutes les salles (filtrage possible) | Public |
+| `GET` | `/api/salles/:id` | Détails d'une salle spécifique par son ID | Public |
+| `GET` | `/api/salles/code/:code` | Recherche d'une salle par son code technique | Interne / Public |
+| `POST` | `/api/salles` | Création d'une nouvelle ressource physique | Admin / Doyen |
+| `PUT` | `/api/salles/:id` | Mise à jour des équipements ou de la capacité | Admin / Doyen |
+| `DELETE` | `/api/salles/:id` | Suppression d'une salle du référentiel | Admin |
+
+---
+
+## ⚙️ Configuration & Installation
+
+### Build du package
 ```bash
-cd campushub-deployment/campushub-salle-service
-./mvnw clean install -DskipTests -Dspring.cloud.config.uri=http://localhost:8888
-```
-*(Note: L'option `-Dspring.cloud.config.uri=http://localhost:8888` est nécessaire pour que les tests et la construction locale puissent se connecter au service `campushub-config` si celui-ci est démarré via Docker sur votre machine locale. `-DskipTests` est utilisé car les tests requièrent une base de données MySQL et d'autres services qui peuvent ne pas être disponibles localement.)*
-
-#### Exécuter le service (localement, sans Docker)
-
-Assurez-vous d'avoir construit le JAR au préalable.
-
-```bash
-cd campushub-deployment/campushub-salle-service
-java -jar target/salle_Service-0.0.1-SNAPSHOT.jar
-```
-
-Le service sera accessible sur `http://localhost:8082`.
-
-#### Construire et exécuter avec Docker Compose
-
-Dans le répertoire `campushub-deployment`, ce service est défini dans le fichier `docker-compose.yml`.
-
-Pour construire l'image Docker (cela inclut la construction du JAR si ce n'est pas déjà fait):
-
-```bash
-cd campushub-deployment
-docker-compose build campushub-salle-service
-```
-
-Pour démarrer le conteneur du service:
-
-```bash
-cd campushub-deployment
-docker-compose up -d campushub-salle-service
+# Générer le JAR sans exécuter les tests
+./mvnw clean package -DskipTests
 ```
 
-Pour vérifier les logs du service une fois démarré:
-
+### Lancement Local
 ```bash
-cd campushub-deployment
-docker-compose logs campushub-salle-service
+# Lancer via Maven
+./mvnw spring-boot:run
 ```
+
+### Déploiement Docker
+```bash
+docker build -t campushub-salle-service .
+```
+
+---
+<p align="center">Optimisation de l'espace et confort pédagogique</p>
