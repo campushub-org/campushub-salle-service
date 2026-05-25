@@ -20,6 +20,11 @@ public class SalleService {
     }
 
     public Salle saveSalle(Salle salle) {
+        if (salle.getId() == null) { // Nouvelle salle
+            if (salleRepository.findByCode(salle.getCode()).isPresent()) {
+                throw new RuntimeException("Une salle avec le code " + salle.getCode() + " existe déjà.");
+            }
+        }
         return salleRepository.save(salle);
     }
 
